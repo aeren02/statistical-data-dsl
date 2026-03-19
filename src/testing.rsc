@@ -7,6 +7,7 @@ import DSL_AST;
 import IO;
 import ParseTree;
 
+import DSL_Checker;
 import DSL_CodeGen;
 
 
@@ -23,6 +24,11 @@ void testDSL(loc file, loc target) {
     println("____________________________________");
     println(cmd);
     println("____________________________________");
+
+    // Static Semantic Validation
+    println("Running Semantic Checks...");
+    checkProgram(cmd);
+    println("Semantic Checks Passed! ✅");
 
     str pyCode = generate(cmd);
     println("Python code:");
