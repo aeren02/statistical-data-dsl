@@ -27,7 +27,10 @@ void testDSL(loc file, loc target) {
 
     // Static Semantic Validation
     println("Running Semantic Checks...");
-    checkProgram(cmd);
+    if (checkProgram(cmd)) {
+        println("⚠️ Compilation stopped due to semantic errors.");
+        return;
+    }
     println("Semantic Checks Passed! ✅");
 
     str pyCode = generate(cmd);
