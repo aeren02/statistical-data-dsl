@@ -11,7 +11,8 @@ str generate(ASTProgram program) {
     bool needsTabulate = false;
     bool needsMatplotlib = false;
     bool needsNumpy = false;
-
+    bool needsSm = false;
+    bool needsLoading = true;
     for (cmd <- program.commands) {
         if (cmd is visualise) {
             needsTabulate = true;
@@ -32,11 +33,19 @@ str generate(ASTProgram program) {
             needsNumpy = true;
         }
         if ((cmd is linReg) && (cmd is multiLinReg)) {
-            code += "import statsmodels.api as sm";
+            needsSm = true;
+        }
+        if (cmd is visualiseTrend) {
+            needsMatplotlib = true;
+            needsNumpy = true;
+        }
+        if (cmd is load) {
+            needsLoading = false;
         }
     }
-
+    
     if (needsTabulate) code += "from tabulate import tabulate\n";
+    if (needsSm) code += "import statsmodels.api as sm\n";
     if (needsMatplotlib) {
         code += "import matplotlib\n";
         code += "matplotlib.use(\'Agg\')\n";
@@ -45,8 +54,21 @@ str generate(ASTProgram program) {
     if (needsNumpy) {
         code += "import numpy as np\n";
     }
+    if (needsLoading){
+        code += 
+        "import glob
+import os
 
-    code += "\n";
+cwd = os.getcwd()
+defaultPath = glob.glob(cwd+\'/*.csv\')[0]
+defaultName = []
+with open(defaultPath, newline=\"\") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        defaultName.append(row)
+    ";
+    } 
+
 
     for (cmd <- program.commands) {
         code += genCommand(cmd);
@@ -110,9 +132,9 @@ yValues=[]
 for _row in <source>:
     yValues.append(_row[\'<yVal>\'])
     xs=[]
-    for xVal in xVals:
-        xs.append(_row[\'<xVals>\'])
-    yValues.append(xs)
+    for xVal in <xVals>:
+        xs.append(_row[xVal])
+    xValues.append(xs)
 # Intercept term
 X = sm.add_constant(xValues)
 # OLS model
