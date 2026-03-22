@@ -22,9 +22,11 @@ syntax Element
   | visualiseBar: "Visualise" Identifier "on" Identifier "using" "barChart"
   | visualiseTrend: "Visualise" Identifier "on" Identifier "vs" Identifier "using" "trendLine"
   | linearRegression: "LinearRegression" Identifier "by" Identifier "on" Identifier
-  | multiLinearRegression: "LinearRegression" Identifier "by" Identifier "on" "{" Identifier* "}"
+  | multiLinearRegression: "LinearRegression" Identifier "by" Identifier "on" "{" Id* "}"
   ;
 
+lexical Id
+= ([a-zA-Z]!<<[a-zA-Z][a-zA-Z0-9_]*!>>[a-zA-Z0-9_]);
 lexical Identifier
   = [a-zA-Z_][a-zA-Z0-9_]* ;
 
