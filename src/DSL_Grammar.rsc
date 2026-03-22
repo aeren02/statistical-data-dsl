@@ -6,10 +6,15 @@ start syntax DSL
 syntax Element
   = load: "Load" String "as" Identifier
   | constrain: "Constrain" Identifier "as" Identifier "{" Condition* "}"
+  //| constrainD: "Constrain" "{" Condition* "}"
   | visualise: "Visualise" Identifier
+  //| visualiseD: "Visualise" 
   | visualiseUsing: "Visualise" Identifier "using" Identifier
+  //| visualiseUsingD: "Visualise" "using" Identifier
   | rename: "Rename" Identifier "column" String "to" String
+  //| renameD: "Rename" "column" String "to" String
   | sortAsc: "Sort" Identifier "by" Identifier "(" RowType ")" "ascending"
+  //| sortAscD: "Sort" Identifier "by" Identifier "(" RowType ")" "ascending"
   | sortDesc: "Sort" Identifier "by" Identifier "(" RowType ")" "descending"
   | groupByCount: "GroupBy" Identifier "by" Identifier "count"
   | groupByAgg: "GroupBy" Identifier "by" Identifier AggType Identifier "(" RowType ")" 
@@ -21,7 +26,7 @@ syntax Element
   ;
 
 lexical Identifier
-  = [a-zA-Z_][a-zA-Z0-9_]*;
+  = [a-zA-Z_][a-zA-Z0-9_]* ;
 
 syntax Condition
   = inList: Identifier "(" RowType ")" "in" Array
