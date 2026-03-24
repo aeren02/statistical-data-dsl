@@ -7,6 +7,14 @@ bool checkProgram(ASTProgram prog) {
     set[str] defined = {};
     bool hasErrors = false;
 
+    bool hasLoad = false;
+    for (cmd <- prog.commands) {
+        if (cmd is load) hasLoad = true;
+    }
+    if (!hasLoad) {
+        defined += {"defaultName"};
+    }
+
     for (cmd <- prog.commands) {
         switch (cmd) {
             case load(_, name): {
@@ -49,6 +57,12 @@ bool checkProgram(ASTProgram prog) {
             }
             case groupByAgg(source, _, _, _, _): {
                 if (source notin defined) { println("❌ Semantic Error: Cannot group undefined dataset \'<source>\'."); hasErrors = true; }
+            }
+            case linReg(source, _, _): {
+                if (source notin defined) { println("❌ Semantic Error: Cannot perform regression on undefined dataset \'<source>\'."); hasErrors = true; }
+            }
+            case multiLinReg(source, _, _): {
+                if (source notin defined) { println("❌ Semantic Error: Cannot perform multiple regression on undefined dataset \'<source>\'."); hasErrors = true; }
             }
         }
     }
