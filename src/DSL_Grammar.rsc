@@ -6,23 +6,31 @@ start syntax DSL
 syntax Element
   = load: "Load" String "as" Identifier
   | constrain: "Constrain" Identifier "as" Identifier "{" Condition* "}"
-  //| constrainD: "Constrain" "{" Condition* "}"
+  | constrainD: "Constrain" "{" Condition* "}"
   | visualise: "Visualise" Identifier
-  //| visualiseD: "Visualise" 
+  | visualiseD: "Visualise."
   | visualiseUsing: "Visualise" Identifier "using" Identifier
-  //| visualiseUsingD: "Visualise" "using" Identifier
+  | visualiseUsingD: "Visualise" "using" Identifier
   | rename: "Rename" Identifier "column" String "to" String
-  //| renameD: "Rename" "column" String "to" String
+  | renameD: "Rename" "column" String "to" String
   | sortAsc: "Sort" Identifier "by" Identifier "(" RowType ")" "ascending"
-  //| sortAscD: "Sort" Identifier "by" Identifier "(" RowType ")" "ascending"
+  | sortAscD: "Sort" "by" Identifier "(" RowType ")" "ascending"
   | sortDesc: "Sort" Identifier "by" Identifier "(" RowType ")" "descending"
+  | sortDescD: "Sort" "by" Identifier "(" RowType ")" "descending"
   | groupByCount: "GroupBy" Identifier "by" Identifier "count"
+  | groupByCountD: "GroupBy"  "by" Identifier "count"
   | groupByAgg: "GroupBy" Identifier "by" Identifier AggType Identifier "(" RowType ")" 
+  | groupByAggD: "GroupBy"  "by" Identifier AggType Identifier "(" RowType ")" 
   | visualisePie: "Visualise" Identifier "on" Identifier "using" "pieChart"
+  | visualisePieD: "Visualise"  "on" Identifier "using" "pieChart"
   | visualiseBar: "Visualise" Identifier "on" Identifier "using" "barChart"
+  | visualiseBarD: "Visualise"  "on" Identifier "using" "barChart"
   | visualiseTrend: "Visualise" Identifier "on" Identifier "vs" Identifier "using" "trendLine"
+  | visualiseTrendD: "Visualise"  "on" Identifier "vs" Identifier "using" "trendLine"
   | linearRegression: "LinearRegression" Identifier "by" Identifier "on" Identifier
+  | linearRegressionD: "LinearRegression"  "by" Identifier "on" Identifier
   | multiLinearRegression: "LinearRegression" Identifier "by" Identifier "on" "{" Id* "}"
+  | multiLinearRegressionD: "LinearRegression"  "by" Identifier "on" "{" Id* "}"
   ;
 
 lexical Id

@@ -23,32 +23,56 @@ ASTCommand toAST(Element el) {
             return load("<stripQuotes(s)>", "<id>");
         case (Element)`Constrain <Identifier from_id> as <Identifier to_id> { <Condition* conds> }`:
             return constrain("<from_id>", "<to_id>", [toAST(c) | c <- conds]);
-//        case (Element)`Constrain as <Identifier to_id> { <Condition* conds> }`:
-//            return constrain("defaultName", "<to_id>", [toAST(c) | c <- conds]);
+        case (Element)`Constrain { <Condition* conds> }`:
+            return constrainD( [toAST(c) | c <- conds]);
         case (Element)`Visualise <Identifier target>`:
             return visualise("<target>");
+        case (Element)`Visualise.`:
+            return visualiseD();    
         case (Element)`Visualise <Identifier target> using <Identifier template>`:
             return visualiseUsing("<target>", "<template>");
+        case (Element)`Visualise  using <Identifier template>`:
+            return visualiseUsingD( "<template>");    
         case (Element)`Rename <Identifier src> column <String oldCol> to <String newCol>`:
             return rename("<src>", "<stripQuotes(oldCol)>", "<stripQuotes(newCol)>");
+        case (Element)`Rename  column <String oldCol> to <String newCol>`:
+            return renameD( "<stripQuotes(oldCol)>", "<stripQuotes(newCol)>");            
         case (Element)`Sort <Identifier src> by <Identifier col> (<RowType t>) ascending`:
             return sortAsc("<src>", "<col>", toAST(t));
+        case (Element)`Sort  by <Identifier col> (<RowType t>) ascending`:
+            return sortAscD( "<col>", toAST(t));
         case (Element)`Sort <Identifier src> by <Identifier col> (<RowType t>) descending`:
             return sortDesc("<src>", "<col>", toAST(t));
+        case (Element)`Sort  by <Identifier col> (<RowType t>) descending`:
+            return sortDescD( "<col>", toAST(t));    
         case (Element)`GroupBy <Identifier src> by <Identifier col> count`:
             return groupByCount("<src>", "<col>");
+        case (Element)`GroupBy  by <Identifier col> count`:
+            return groupByCountD( "<col>");
         case (Element)`GroupBy <Identifier src> by <Identifier col> <AggType agg> <Identifier valCol> (<RowType t>)`:
             return groupByAgg("<src>", "<col>", toAST(agg), "<valCol>", toAST(t));
+        case (Element)`GroupBy  by <Identifier col> <AggType agg> <Identifier valCol> (<RowType t>)`:
+            return groupByAggD( "<col>", toAST(agg), "<valCol>", toAST(t));
         case (Element)`Visualise <Identifier target> on <Identifier col> using pieChart`:
             return visualisePie("<target>", "<col>");
+        case (Element)`Visualise  on <Identifier col> using pieChart`:
+            return visualisePieD( "<col>");
         case (Element)`Visualise <Identifier target> on <Identifier col> using barChart`:
             return visualiseBar("<target>", "<col>");
+        case (Element)`Visualise  on <Identifier col> using barChart`:
+            return visualiseBarD( "<col>");
         case (Element)`Visualise <Identifier target> on <Identifier xCol> vs <Identifier yCol> using trendLine`:
             return visualiseTrend("<target>", "<xCol>", "<yCol>");
+        case (Element)`Visualise  on <Identifier xCol> vs <Identifier yCol> using trendLine`:
+            return visualiseTrendD( "<xCol>", "<yCol>");
         case (Element)`LinearRegression <Identifier src> by <Identifier yVal> on <Identifier xVal>`:
             return linReg("<src>","<yVal>", ["<xVal>"]);
+        case (Element)`LinearRegression  by <Identifier yVal> on <Identifier xVal>`:
+            return linRegD("<yVal>", ["<xVal>"]);
         case (Element)`LinearRegression <Identifier src> by <Identifier yVal> on { <Id* xVals> }`:
             return multiLinReg("<src>","<yVal>",["<x>" | x <- xVals ]);
+        case (Element)`LinearRegression  by <Identifier yVal> on { <Id* xVals> }`:
+            return multiLinRegD("<yVal>",["<x>" | x <- xVals ]);
         default: throw "Unknown Command Type";
     }
 }

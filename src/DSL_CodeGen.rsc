@@ -85,41 +85,80 @@ str genCommand(ASTCommand command) {
         case constrain(source, target, conditions): {
             return genConstrain(source, target, conditions);
         }
+        case constrainD( conditions): {
+            return genConstrain("defaultName", "defaultName", conditions);
+        }
         case linReg(source, yVal, xVals): {
             return genLinReg(source, yVal, xVals);
+        }
+        case linRegD( yVal, xVals): {
+            return genLinReg("defaultName", yVal, xVals);
         }
         case multiLinReg(source, yVal, xVals): {
             return genLinReg(source, yVal, xVals);
         }
+        case multiLinRegD( yVal, xVals): {
+            return genLinReg("defaultName", yVal, xVals);
+        }
         case visualise(name): {
             return genVisualise(name, "default");
+        }
+        case visualiseD(): {
+            return genVisualise("defaultName", "default");
         }
         case visualiseUsing(name, vizType): {
             return genVisualise(name, vizType);            
         }
+        case visualiseUsingD( vizType): {
+            return genVisualise("defaultName", vizType);            
+        }
         case visualisePie(name, col): {
             return genVisualisePie(name, col);
+        }
+        case visualisePieD( col): {
+            return genVisualisePie("defaultName", col);
         }
         case visualiseBar(name, col): {
             return genVisualiseBar(name, col);
         }
+        case visualiseBarD( col): {
+            return genVisualiseBar("defaultName", col);
+        }
         case visualiseTrend(name, xCol, yCol): {
             return genVisualiseTrend(name, xCol, yCol);
+        }
+        case visualiseTrendD( xCol, yCol): {
+            return genVisualiseTrend("defaultName", xCol, yCol);
         }
         case rename(source, oldCol, newCol): {
             return genRename(source, oldCol, newCol);
         }
+        case renameD( oldCol, newCol): {
+            return genRename("defaultName", oldCol, newCol);
+        }
         case sortAsc(source, col, t): {
             return genSort(source, col, t, false);
+        }
+        case sortAscD( col, t): {
+            return genSort("defaultName", col, t, false);
         }
         case sortDesc(source, col, t): {
             return genSort(source, col, t, true);
         }
+        case sortDescD( col, t): {
+            return genSort("defaultName", col, t, true);
+        }
         case groupByCount(source, groupCol): {
             return genGroupByCount(source, groupCol);
         }
+        case groupByCountD( groupCol): {
+            return genGroupByCount("defaultName", groupCol);
+        }
         case groupByAgg(source, groupCol, aggType, valueCol, valType): {
             return genGroupByAgg(source, groupCol, aggType, valueCol, valType);
+        }
+        case groupByAggD( groupCol, aggType, valueCol, valType): {
+            return genGroupByAgg("defaultName", groupCol, aggType, valueCol, valType);
         }
         default: throw "Unknown command when generating code";
     }
@@ -163,15 +202,17 @@ str genConstrain(str source, str target, list[ASTCondition] conditions) {
     );
 
     return "
-<target>_filters = <rows>
-<target> = []
+target_filters = <rows>
+target = []
 for row in <source>:
     if (
 <conds>
     ):
-        filtered_row = {col:row[col] for col in <target>_filters}
-        <target>.append(filtered_row)
+        filtered_row = {col:row[col] for col in target_filters}
+        target.append(filtered_row)
+<target> = target
 ";
+
 }
 
 // placeholder "default" for when user does not specify type. Feel free to change
